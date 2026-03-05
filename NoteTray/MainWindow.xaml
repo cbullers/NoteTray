@@ -1,0 +1,88 @@
+<Window x:Class="NoteTray.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:NoteTray.Views"
+        xmlns:vm="clr-namespace:NoteTray.ViewModels"
+        mc:Ignorable="d"
+        Title="NoteTray"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Background="Transparent"
+        Width="350"
+        ResizeMode="NoResize">
+
+    <Border Background="{StaticResource PanelBackground}"
+            BorderBrush="{StaticResource PanelBorder}"
+            BorderThickness="1,0,0,0"
+            CornerRadius="8,0,0,8">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource PanelSurface}"
+                    BorderBrush="{StaticResource PanelBorder}"
+                    BorderThickness="0,0,0,1"
+                    Padding="12,10"
+                    CornerRadius="8,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Folder selector / back button -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Back button (visible when editing) -->
+                        <Button Content="&#x2190;"
+                                Style="{StaticResource IconButton}"
+                                Command="{Binding BackToListCommand}"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
+                                Margin="0,0,8,0"
+                                ToolTip="Back to notes list"/>
+
+                        <!-- Folder selector -->
+                        <ComboBox ItemsSource="{Binding Folders}"
+                                  SelectedItem="{Binding CurrentFolder}"
+                                  DisplayMemberPath="Name"
+                                  Style="{StaticResource FolderComboBox}"
+                                  MinWidth="120"/>
+                    </StackPanel>
+
+                    <!-- Action buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Content="+"
+                                Style="{StaticResource IconButton}"
+                                Command="{Binding NewNoteCommand}"
+                                ToolTip="New note"
+                                Margin="4,0"/>
+                        <Button Content="&#x1F5C0;"
+                                Style="{StaticResource IconButton}"
+                                Click="NewFolderButton_Click"
+                                ToolTip="New folder"
+                                Margin="4,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Content area: note list or editor -->
+            <Grid Grid.Row="1">
+                <!-- Note List (visible when not editing) -->
+                <views:NoteListView DataContext="{Binding}"
+                                     Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}"/>
+
+                <!-- Note Editor (visible when editing) -->
+                <views:NoteEditorView DataContext="{Binding SelectedNote}"
+                                       Visibility="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

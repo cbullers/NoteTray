@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.apptorium.com)",
+      "WebFetch(domain:macsources.com)",
+      "WebFetch(domain:setapp.com)",
+      "WebFetch(domain:productivity.directory)",
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "Bash(cargo --version)",
+      "Bash(where dotnet)",
+      "Bash(where node)",
+      "Bash(where npm)",
+      "Bash(where cargo)",
+      "Bash(where rustc)",
+      "Bash(C:\\\\Users\\\\bullersc\\\\AppData\\\\Local\\\\Microsoft\\\\dotnet\\\\dotnet.exe --list-sdks)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" --list-sdks)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" new sln -n NoteTray)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" sln NoteTray.sln add NoteTray/NoteTray.csproj)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" add package Hardcodet.NotifyIcon.Wpf)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" add package NHotkey.Wpf)",
+      "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" build)",
+      "Bash(taskkill //F //IM NoteTray.exe)"
+    ]
+  }
+}

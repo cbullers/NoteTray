@@ -1,0 +1,24 @@
+<Window x:Class="NoteTray.GrabBarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ShowActivated="False"
+        Background="Transparent"
+        Width="8"
+        Height="80"
+        ResizeMode="NoResize"
+        Opacity="0.3"
+        Cursor="Hand">
+
+    <Border x:Name="GrabBarBorder"
+            Background="{StaticResource Accent}"
+            CornerRadius="4,0,0,4"
+            Margin="0,0,0,0">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="0.3" Direction="180"/>
+        </Border.Effect>
+    </Border>
+</Window>

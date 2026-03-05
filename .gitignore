@@ -1,0 +1,59 @@
+## Visual Studio / .NET
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/repositories.config
+*.nuspec
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio auto-generated files
+.vs/
+*.vcxproj.filters
+*.vcxproj.user
+
+# ReSharper
+.idea/
+*.sln.iml
+
+# Rider
+.idea/
+
+# JetBrains Rider
+*.DotSettings.user
+
+# Publish output
+publish/
+PublishProfiles/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test results
+TestResults/
+coverage.xml
+*.coverage
+*.coveragexml
