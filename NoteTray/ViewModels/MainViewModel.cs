@@ -56,7 +56,7 @@ public class MainViewModel : ViewModelBase
         _storage = storage;
 
         NewNoteCommand = new RelayCommand(CreateNewNote, () => CurrentFolder != null);
-        DeleteNoteCommand = new RelayCommand(DeleteSelectedNote, () => SelectedNote != null);
+        DeleteNoteCommand = new RelayCommand<NoteViewModel>(DeleteNote, n => n != null);
         NewFolderCommand = new RelayCommand<string>(CreateNewFolder);
         DeleteFolderCommand = new RelayCommand(DeleteCurrentFolder, () => CurrentFolder != null && Folders.Count > 1);
         BackToListCommand = new RelayCommand(BackToList);
@@ -97,14 +97,13 @@ public class MainViewModel : ViewModelBase
         SelectedNote = vm;
     }
 
-    private void DeleteSelectedNote()
+    private void DeleteNote(NoteViewModel? note)
     {
-        if (SelectedNote == null) return;
+        if (note == null) return;
 
-        var noteToDelete = SelectedNote;
-        SelectedNote = null;
-        _storage.DeleteNote(noteToDelete.Id);
-        Notes.Remove(noteToDelete);
+        if (SelectedNote == note) SelectedNote = null;
+        _storage.DeleteNote(note.Id);
+        Notes.Remove(note);
     }
 
     private void CreateNewFolder(string? name)

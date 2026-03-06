@@ -2,14 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Colors -->
-    <Color x:Key="PanelBackgroundColor">#1E1E2E</Color>
-    <Color x:Key="PanelSurfaceColor">#313244</Color>
-    <Color x:Key="PanelBorderColor">#45475A</Color>
-    <Color x:Key="AccentColor">#89B4FA</Color>
-    <Color x:Key="TextPrimaryColor">#CDD6F4</Color>
-    <Color x:Key="TextSecondaryColor">#A6ADC8</Color>
-    <Color x:Key="TextMutedColor">#6C7086</Color>
-    <Color x:Key="DangerColor">#F38BA8</Color>
+    <Color x:Key="PanelBackgroundColor">#393D3F</Color>
+    <Color x:Key="PanelSurfaceColor">#474C4F</Color>
+    <Color x:Key="PanelBorderColor">#585E61</Color>
+    <Color x:Key="AccentColor">#5386E4</Color>
+    <Color x:Key="TextPrimaryColor">#FFFFFF</Color>
+    <Color x:Key="TextSecondaryColor">#C3C3C3</Color>
+    <Color x:Key="TextMutedColor">#ABA8B2</Color>
+    <Color x:Key="DangerColor">#E07070</Color>
 
     <SolidColorBrush x:Key="PanelBackground" Color="{StaticResource PanelBackgroundColor}" />
     <SolidColorBrush x:Key="PanelSurface" Color="{StaticResource PanelSurfaceColor}" />

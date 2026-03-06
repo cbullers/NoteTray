@@ -35,6 +35,7 @@ public partial class App : Application
         // Create the grab bar
         _grabBar = new GrabBarWindow(_settings);
         _grabBar.GrabBarClicked += OnGrabBarClicked;
+        _mainWindow.Deactivated += OnMainWindowDeactivated;
 
         if (_settings.Settings.GrabBarEnabled)
         {
@@ -88,8 +89,8 @@ public partial class App : Application
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             // Draw a simple notepad icon
-            using var pen = new Pen(Color.FromArgb(137, 180, 250), 1.5f);
-            using var brush = new SolidBrush(Color.FromArgb(137, 180, 250));
+            using var pen = new Pen(Color.FromArgb(83, 134, 228), 1.5f);
+            using var brush = new SolidBrush(Color.FromArgb(83, 134, 228));
 
             // Outer rectangle
             g.DrawRectangle(pen, 2, 1, 11, 13);
@@ -148,6 +149,16 @@ public partial class App : Application
     private void OnGrabBarClicked(object? sender, EventArgs e)
     {
         TogglePanel();
+    }
+
+    private void OnMainWindowDeactivated(object? sender, EventArgs e)
+    {
+        if (_mainWindow!.IsPanelVisible)
+        {
+            _mainWindow.SlideOut();
+            if (_settings!.Settings.GrabBarEnabled)
+                _grabBar?.Show();
+        }
     }
 
     private void ExitApplication()

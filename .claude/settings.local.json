@@ -20,7 +20,11 @@
       "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" add package Hardcodet.NotifyIcon.Wpf)",
       "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" add package NHotkey.Wpf)",
       "Bash(\"C:/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" build)",
-      "Bash(taskkill //F //IM NoteTray.exe)"
+      "Bash(taskkill //F //IM NoteTray.exe)",
+      "WebFetch(domain:coolors.co)",
+      "Bash(dotnet add package FontAwesome.Sharp)",
+      "Bash(\"/c/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" add package FontAwesome.Sharp)",
+      "Bash(\"/c/Users/bullersc/AppData/Local/Microsoft/dotnet/dotnet.exe\" build)"
     ]
   }
 }

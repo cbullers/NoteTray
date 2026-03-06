@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:NoteTray.Views"
         xmlns:vm="clr-namespace:NoteTray.ViewModels"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Title="NoteTray"
         WindowStyle="None"
@@ -13,13 +14,21 @@
         ShowInTaskbar="False"
         ShowActivated="False"
         Background="Transparent"
+        Opacity="0.95"
         Width="350"
         ResizeMode="NoResize">
 
-    <Border Background="{StaticResource PanelBackground}"
-            BorderBrush="{StaticResource PanelBorder}"
-            BorderThickness="1,0,0,0"
-            CornerRadius="8,0,0,8">
+    <Grid>
+        <Grid.RenderTransform>
+            <TranslateTransform x:Name="SlideTransform"/>
+        </Grid.RenderTransform>
+
+        <Border x:Name="PanelBorder"
+                Background="{StaticResource PanelBackground}"
+                BorderBrush="{StaticResource PanelBorder}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0,8,8,8">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -32,7 +41,7 @@
                     BorderBrush="{StaticResource PanelBorder}"
                     BorderThickness="0,0,0,1"
                     Padding="12,10"
-                    CornerRadius="8,0,0,0">
+                    CornerRadius="8,8,0,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -42,12 +51,13 @@
                     <!-- Folder selector / back button -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <!-- Back button (visible when editing) -->
-                        <Button Content="&#x2190;"
-                                Style="{StaticResource IconButton}"
+                        <Button Style="{StaticResource IconButton}"
                                 Command="{Binding BackToListCommand}"
                                 Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}"
                                 Margin="0,0,8,0"
-                                ToolTip="Back to notes list"/>
+                                ToolTip="Back to notes list">
+                            <fa:IconBlock Icon="ChevronLeft" FontSize="14"/>
+                        </Button>
 
                         <!-- Folder selector -->
                         <ComboBox ItemsSource="{Binding Folders}"
@@ -59,16 +69,18 @@
 
                     <!-- Action buttons -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Button Content="+"
-                                Style="{StaticResource IconButton}"
+                        <Button Style="{StaticResource IconButton}"
                                 Command="{Binding NewNoteCommand}"
                                 ToolTip="New note"
-                                Margin="4,0"/>
-                        <Button Content="&#x1F5C0;"
-                                Style="{StaticResource IconButton}"
+                                Margin="4,0">
+                            <fa:IconBlock Icon="Plus" FontSize="14"/>
+                        </Button>
+                        <Button Style="{StaticResource IconButton}"
                                 Click="NewFolderButton_Click"
                                 ToolTip="New folder"
-                                Margin="4,0"/>
+                                Margin="4,0">
+                            <fa:IconBlock Icon="FolderPlus" FontSize="14"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -84,5 +96,17 @@
                                        Visibility="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
             </Grid>
         </Grid>
-    </Border>
+        </Border>
+
+        <!-- Resize grip on left edge -->
+        <Rectangle x:Name="ResizeGrip"
+                   Width="8"
+                   Margin="0,8,0,8"
+                   HorizontalAlignment="Left"
+                   Fill="Transparent"
+                   Cursor="SizeWE"
+                   MouseLeftButtonDown="ResizeGrip_MouseLeftButtonDown"
+                   MouseMove="ResizeGrip_MouseMove"
+                   MouseLeftButtonUp="ResizeGrip_MouseLeftButtonUp"/>
+    </Grid>
 </Window>
