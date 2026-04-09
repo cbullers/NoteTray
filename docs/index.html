@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoteTray — Quick Notes from Your System Tray</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --accent: #5B9CF6;
+      --accent-hover: #7bb3ff;
+      --text: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+      background: linear-gradient(180deg, #162033 0%, var(--bg) 100%);
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header .tagline {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Screenshot showcase */
+    .showcase {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .showcase img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .screenshot-placeholder {
+      background: var(--surface);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Features */
+    .features {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      color: var(--text);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      transition: border-color 0.15s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent);
+    }
+
+    .feature-card .icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Quick start */
+    .quickstart {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .quickstart h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .code-block .comment { color: var(--text-muted); }
+    .code-block .cmd { color: var(--accent); }
+
+    /* Hotkey callout */
+    .hotkey-section {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(180deg, var(--bg) 0%, #162033 100%);
+    }
+
+    .hotkey-section p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    kbd {
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.9rem;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--accent);
+      box-shadow: 0 2px 0 var(--border);
+    }
+
+    .kbd-combo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .kbd-plus {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Note<span>Tray</span></h1>
+    <p class="tagline">
+      A lightweight note-taking app that lives in your Windows system tray. Summon it instantly, jot something down, and get back to work.
+    </p>
+    <div class="cta-buttons">
+      <a href="https://github.com/cbullers/NoteTray/releases" class="btn btn-primary">
+        Download
+      </a>
+      <a href="https://github.com/cbullers/NoteTray" class="btn btn-secondary">
+        View on GitHub
+      </a>
+    </div>
+  </header>
+
+  <section class="showcase">
+    <!--
+      To add a screenshot: save an image as docs/images/screenshot.png
+      then replace the placeholder div below with:
+      <img src="images/screenshot.png" alt="NoteTray screenshot" />
+    -->
+    <div class="screenshot-placeholder">
+      Screenshot coming soon &mdash; drop an image into <code>docs/images/</code>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="icon">&#9889;</div>
+        <h3>Instant Access</h3>
+        <p>Global hotkey summons your notes from anywhere. No window switching, no hunting through the taskbar.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128193;</div>
+        <h3>Folder Organization</h3>
+        <p>Group notes into folders. Switch between them with a quick dropdown. Keep work and personal notes separate.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128221;</div>
+        <h3>Markdown Support</h3>
+        <p>Write in plain text with markdown formatting. Toggle a live preview to see your notes rendered.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128269;</div>
+        <h3>Quick Search</h3>
+        <p>Filter your notes as you type. Find what you need without scrolling through a long list.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#127912;</div>
+        <h3>Color Coding</h3>
+        <p>Assign colors to notes for quick visual identification. Important notes stand out at a glance.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128421;</div>
+        <h3>Multi-Monitor</h3>
+        <p>The grab bar tracks your active monitor. Your notes panel always appears on the screen you're working on.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128194;</div>
+        <h3>Plain File Storage</h3>
+        <p>Notes stored as <code>.md</code> files in your AppData folder. No database, no cloud dependency, fully portable.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#127769;</div>
+        <h3>Dark Theme</h3>
+        <p>A polished dark interface that's easy on the eyes during late-night work sessions.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="icon">&#128296;</div>
+        <h3>Configurable</h3>
+        <p>Custom hotkeys, panel width, animation speed, grab bar position, and startup behavior. Make it yours.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="hotkey-section">
+    <p>Summon your notes from anywhere</p>
+    <div class="kbd-combo">
+      <kbd>Ctrl</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>Shift</kbd>
+      <span class="kbd-plus">+</span>
+      <kbd>.</kbd>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Default shortcut &mdash; fully configurable</p>
+  </section>
+
+  <section class="quickstart">
+    <h2>Quick Start</h2>
+    <div class="code-block">
+      <span class="comment"># Clone the repo</span><br />
+      <span class="cmd">git clone</span> https://github.com/cbullers/NoteTray.git<br />
+      <span class="cmd">cd</span> NoteTray<br /><br />
+      <span class="comment"># Build and run</span><br />
+      <span class="cmd">dotnet run</span> --project NoteTray/NoteTray.csproj<br /><br />
+      <span class="comment"># NoteTray appears in your system tray</span>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      Built by <a href="https://github.com/cbullers">Chris Bullers</a>
+      &middot; <a href="https://github.com/cbullers/NoteTray">Source on GitHub</a>
+      &middot; MIT License
+    </p>
+  </footer>
+
+</body>
+</html>
