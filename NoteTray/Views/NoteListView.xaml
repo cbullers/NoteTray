@@ -27,10 +27,15 @@
         </TextBlock>
 
         <!-- Notes list -->
-        <ListBox ItemsSource="{Binding Notes}"
+        <ListBox x:Name="NoteList"
+                 ItemsSource="{Binding Notes}"
                  SelectedItem="{Binding SelectedNote}"
                  Style="{StaticResource NoteListBox}"
-                 VirtualizingPanel.ScrollUnit="Pixel">
+                 VirtualizingPanel.ScrollUnit="Pixel"
+                 AllowDrop="True"
+                 PreviewMouseLeftButtonDown="NoteList_PreviewMouseLeftButtonDown"
+                 PreviewMouseMove="NoteList_PreviewMouseMove"
+                 Drop="NoteList_Drop">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">
@@ -56,17 +61,29 @@
                                                    TextTrimming="CharacterEllipsis"
                                                    Margin="0,0,8,2"/>
 
-                                        <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
-                                                Style="{StaticResource DangerButton}"
-                                                Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
-                                                CommandParameter="{Binding}"
-                                                Visibility="Collapsed"
-                                                x:Name="DeleteButton"
-                                                VerticalAlignment="Center"
-                                                ToolTip="Delete note"
-                                                Padding="4,6">
-                                            <fa:IconBlock Icon="TrashAlt" FontSize="12"/>
-                                        </Button>
+                                        <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                                    Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Button Style="{StaticResource IconButton}"
+                                                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Visibility="Collapsed"
+                                                    x:Name="PinButton"
+                                                    ToolTip="Pin/Unpin note"
+                                                    Padding="4,6">
+                                                <fa:IconBlock x:Name="PinIcon" Icon="Thumbtack" FontSize="12"
+                                                              Foreground="{StaticResource TextMuted}"/>
+                                            </Button>
+                                            <Button Style="{StaticResource DangerButton}"
+                                                    Margin="4,0,0,0"
+                                                    Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Visibility="Collapsed"
+                                                    x:Name="DeleteButton"
+                                                    ToolTip="Delete note"
+                                                    Padding="4,6">
+                                                <fa:IconBlock Icon="TrashAlt" FontSize="12"/>
+                                            </Button>
+                                        </StackPanel>
 
                                         <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding ModifiedAt, StringFormat='{}{0:MMM d, yyyy  h:mm tt}'}"
@@ -77,8 +94,13 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="CardBorder" Property="BorderBrush" Value="{StaticResource Accent}" />
+                                        <Setter TargetName="PinButton" Property="Visibility" Value="Visible" />
                                         <Setter TargetName="DeleteButton" Property="Visibility" Value="Visible" />
                                     </Trigger>
+                                    <DataTrigger Binding="{Binding IsPinned}" Value="True">
+                                        <Setter TargetName="PinButton" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="PinIcon" Property="Foreground" Value="{StaticResource Accent}" />
+                                    </DataTrigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource Accent}" />
                                     </Trigger>

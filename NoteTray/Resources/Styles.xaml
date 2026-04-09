@@ -2,14 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Colors -->
-    <Color x:Key="PanelBackgroundColor">#393D3F</Color>
-    <Color x:Key="PanelSurfaceColor">#474C4F</Color>
-    <Color x:Key="PanelBorderColor">#585E61</Color>
-    <Color x:Key="AccentColor">#5386E4</Color>
-    <Color x:Key="TextPrimaryColor">#FFFFFF</Color>
-    <Color x:Key="TextSecondaryColor">#C3C3C3</Color>
-    <Color x:Key="TextMutedColor">#ABA8B2</Color>
-    <Color x:Key="DangerColor">#E07070</Color>
+    <Color x:Key="PanelBackgroundColor">#1B2333</Color>
+    <Color x:Key="PanelSurfaceColor">#243044</Color>
+    <Color x:Key="PanelBorderColor">#2E3D55</Color>
+    <Color x:Key="AccentColor">#5B9CF6</Color>
+    <Color x:Key="TextPrimaryColor">#E2E8F0</Color>
+    <Color x:Key="TextSecondaryColor">#94A3B8</Color>
+    <Color x:Key="TextMutedColor">#64748B</Color>
+    <Color x:Key="DangerColor">#F87171</Color>
 
     <SolidColorBrush x:Key="PanelBackground" Color="{StaticResource PanelBackgroundColor}" />
     <SolidColorBrush x:Key="PanelSurface" Color="{StaticResource PanelSurfaceColor}" />
@@ -110,5 +110,79 @@
         <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="8,6" />
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Background" Value="{StaticResource PanelSurface}" />
+                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}" />
+                    <Setter Property="Padding" Value="8,6" />
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PanelBorder}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="1"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Focusable="False"
+                                      ClickMode="Press">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="4">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Grid.Column="1"
+                                                  Data="M0,0 L4,4 8,0"
+                                                  Fill="{StaticResource TextSecondary}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  StrokeThickness="0"/>
+                                        </Grid>
+                                    </Border>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+                        <TextBlock Text="{Binding SelectedItem.Name, RelativeSource={RelativeSource TemplatedParent}}"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   Margin="10,6,28,6"
+                                   VerticalAlignment="Center"
+                                   IsHitTestVisible="False"/>
+                        <Popup x:Name="Popup"
+                               Placement="Bottom"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Border Background="{StaticResource PanelSurface}"
+                                    BorderBrush="{StaticResource PanelBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Margin="0,2,0,0">
+                                <ScrollViewer>
+                                    <StackPanel IsItemsHost="True"/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

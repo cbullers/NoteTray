@@ -11,6 +11,8 @@ public class MainViewModel : ViewModelBase
     private Folder? _currentFolder;
     private NoteViewModel? _selectedNote;
     private bool _isEditing;
+    private string _searchText = string.Empty;
+    private List<NoteViewModel>? _allNotesCache;
 
     public ObservableCollection<Folder> Folders { get; } = new();
     public ObservableCollection<NoteViewModel> Notes { get; } = new();
@@ -45,11 +47,22 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _isEditing, value);
     }
 
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (SetProperty(ref _searchText, value))
+                ApplySearchFilter();
+        }
+    }
+
     public ICommand NewNoteCommand { get; }
     public ICommand DeleteNoteCommand { get; }
     public ICommand NewFolderCommand { get; }
     public ICommand DeleteFolderCommand { get; }
     public ICommand BackToListCommand { get; }
+    public ICommand TogglePinCommand { get; }
 
     public MainViewModel(NoteStorageService storage)
     {
@@ -60,6 +73,7 @@ public class MainViewModel : ViewModelBase
         NewFolderCommand = new RelayCommand<string>(CreateNewFolder);
         DeleteFolderCommand = new RelayCommand(DeleteCurrentFolder, () => CurrentFolder != null && Folders.Count > 1);
         BackToListCommand = new RelayCommand(BackToList);
+        TogglePinCommand = new RelayCommand<NoteViewModel>(TogglePin, n => n != null);
 
         LoadFolders();
     }
@@ -83,8 +97,21 @@ public class MainViewModel : ViewModelBase
         if (CurrentFolder == null) return;
 
         var notes = _storage.GetNotesForFolder(CurrentFolder.Id);
-        foreach (var note in notes)
-            Notes.Add(new NoteViewModel(note, _storage));
+        _allNotesCache = notes.Select(n => new NoteViewModel(n, _storage)).ToList();
+        ApplySearchFilter();
+    }
+
+    private void ApplySearchFilter()
+    {
+        if (_allNotesCache == null) return;
+
+        Notes.Clear();
+        var filtered = string.IsNullOrWhiteSpace(_searchText)
+            ? _allNotesCache
+            : _allNotesCache.Where(n => n.Title.Contains(_searchText, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        foreach (var note in filtered)
+            Notes.Add(note);
     }
 
     private void CreateNewNote()
@@ -125,10 +152,48 @@ public class MainViewModel : ViewModelBase
         Folders.Remove(folderToDelete);
     }
 
+    private void TogglePin(NoteViewModel? note)
+    {
+        if (note == null) return;
+        note.IsPinned = !note.IsPinned;
+        _storage.SaveIndex();
+        LoadNotesForCurrentFolder();
+    }
+
+    public void MoveNote(NoteViewModel source, NoteViewModel target)
+    {
+        var oldIndex = Notes.IndexOf(source);
+        var newIndex = Notes.IndexOf(target);
+        if (oldIndex < 0 || newIndex < 0 || oldIndex == newIndex) return;
+
+        Notes.Move(oldIndex, newIndex);
+
+        // Update SortOrder on all notes to match new visual order
+        for (int i = 0; i < Notes.Count; i++)
+        {
+            Notes[i].Model.SortOrder = i;
+        }
+
+        _allNotesCache = Notes.ToList();
+        _storage.SaveIndex();
+    }
+
     private void BackToList()
     {
         SelectedNote?.Save();
         SelectedNote = null;
+    }
+
+    public void CreateNoteFromClipboard(string content)
+    {
+        if (CurrentFolder == null) return;
+
+        var note = _storage.CreateNote(CurrentFolder.Id);
+        _storage.SaveNoteContent(note.Id, content);
+
+        var vm = new NoteViewModel(note, _storage);
+        Notes.Insert(0, vm);
+        _allNotesCache?.Insert(0, vm);
     }
 
     public void SaveAll()

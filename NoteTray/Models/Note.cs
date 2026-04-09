@@ -8,5 +8,6 @@ public class Note
     public string? Color { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
+    public bool IsPinned { get; set; }
     public int SortOrder { get; set; }
 }

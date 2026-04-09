@@ -24,6 +24,7 @@ public partial class App : Application
         // Initialize services
         _settings = new SettingsService();
         _settings.Load();
+        _settings.ApplyStartWithWindows();
 
         _storage = new NoteStorageService();
         _storage.Initialize();
@@ -89,8 +90,8 @@ public partial class App : Application
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             // Draw a simple notepad icon
-            using var pen = new Pen(Color.FromArgb(83, 134, 228), 1.5f);
-            using var brush = new SolidBrush(Color.FromArgb(83, 134, 228));
+            using var pen = new Pen(Color.FromArgb(91, 156, 246), 1.5f);
+            using var brush = new SolidBrush(Color.FromArgb(91, 156, 246));
 
             // Outer rectangle
             g.DrawRectangle(pen, 2, 1, 11, 13);
@@ -119,11 +120,36 @@ public partial class App : Application
         {
             // Invalid hotkey config — skip
         }
+
+        try
+        {
+            var (modifiers, key) = ParseHotkey(_settings!.Settings.PasteHotkey);
+            HotkeyManager.Current.AddOrReplace("PasteNote", key, modifiers, OnPasteHotkeyPressed);
+        }
+        catch (HotkeyAlreadyRegisteredException)
+        {
+            // Hotkey is in use by another app — silently skip
+        }
+        catch
+        {
+            // Invalid hotkey config — skip
+        }
     }
 
     private void OnHotkeyPressed(object? sender, HotkeyEventArgs e)
     {
         TogglePanel();
+        e.Handled = true;
+    }
+
+    private void OnPasteHotkeyPressed(object? sender, HotkeyEventArgs e)
+    {
+        var text = System.Windows.Clipboard.GetText();
+        if (!string.IsNullOrEmpty(text))
+        {
+            _mainWindow?.ViewModel.CreateNoteFromClipboard(text);
+            _trayIcon?.ShowBalloonTip("NoteTray", "Note captured from clipboard", BalloonIcon.Info);
+        }
         e.Handled = true;
     }
 
@@ -173,6 +199,12 @@ public partial class App : Application
         try
         {
             HotkeyManager.Current.Remove("TogglePanel");
+        }
+        catch { }
+
+        try
+        {
+            HotkeyManager.Current.Remove("PasteNote");
         }
         catch { }
 

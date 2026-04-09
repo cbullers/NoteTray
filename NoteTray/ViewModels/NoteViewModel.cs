@@ -17,6 +17,19 @@ public class NoteViewModel : ViewModelBase
     public string Title => Model.Title;
     public DateTime ModifiedAt => Model.ModifiedAt;
 
+    public bool IsPinned
+    {
+        get => Model.IsPinned;
+        set
+        {
+            if (Model.IsPinned != value)
+            {
+                Model.IsPinned = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public string Content
     {
         get => _content;

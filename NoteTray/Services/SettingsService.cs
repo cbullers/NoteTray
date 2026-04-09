@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text.Json;
+using Microsoft.Win32;
 using NoteTray.Models;
 
 namespace NoteTray.Services;
@@ -38,5 +39,24 @@ public class SettingsService
         Directory.CreateDirectory(AppDataPath);
         var json = JsonSerializer.Serialize(Settings, JsonOptions);
         File.WriteAllText(SettingsPath, json);
+        ApplyStartWithWindows();
+    }
+
+    public void ApplyStartWithWindows()
+    {
+        using var key = Registry.CurrentUser.OpenSubKey(
+            @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
+        if (key == null) return;
+
+        if (Settings.StartWithWindows)
+        {
+            var exePath = Environment.ProcessPath;
+            if (!string.IsNullOrEmpty(exePath))
+                key.SetValue("NoteTray", $"\"{exePath}\"");
+        }
+        else
+        {
+            key.DeleteValue("NoteTray", throwOnMissingValue: false);
+        }
     }
 }

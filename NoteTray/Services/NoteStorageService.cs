@@ -43,7 +43,8 @@ public class NoteStorageService
     {
         return _index.Notes
             .Where(n => n.FolderId == folderId)
-            .OrderBy(n => n.SortOrder)
+            .OrderByDescending(n => n.IsPinned)
+            .ThenBy(n => n.SortOrder)
             .ToList();
     }
 
@@ -137,7 +138,7 @@ public class NoteStorageService
         }
     }
 
-    private void SaveIndex()
+    public void SaveIndex()
     {
         var json = JsonSerializer.Serialize(_index, JsonOptions);
         File.WriteAllText(IndexPath, json);

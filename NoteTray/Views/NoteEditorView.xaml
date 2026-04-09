@@ -6,10 +6,19 @@
              mc:Ignorable="d">
 
     <Grid>
+        <!-- Editor (shown by default) -->
         <TextBox Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource NoteTextBox}"
                  VerticalAlignment="Stretch"
                  HorizontalAlignment="Stretch"
-                 x:Name="EditorTextBox"/>
+                 x:Name="EditorTextBox" />
+
+        <!-- Markdown preview -->
+        <FlowDocumentScrollViewer x:Name="PreviewViewer"
+                                  Visibility="Collapsed"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="#FF1B2333"
+                                  Foreground="#FFE2E8F0"
+                                  IsToolBarVisible="False" />
     </Grid>
 </UserControl>

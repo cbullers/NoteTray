@@ -32,6 +32,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -69,6 +70,14 @@
 
                     <!-- Action buttons -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button x:Name="TogglePreviewButton"
+                                Style="{StaticResource IconButton}"
+                                Click="TogglePreviewButton_Click"
+                                ToolTip="Toggle Preview"
+                                Margin="4,0"
+                                Visibility="{Binding IsEditing, Converter={StaticResource BoolToVisibility}}">
+                            <fa:IconBlock x:Name="TogglePreviewIcon" Icon="Eye" FontSize="14"/>
+                        </Button>
                         <Button Style="{StaticResource IconButton}"
                                 Command="{Binding NewNoteCommand}"
                                 ToolTip="New note"
@@ -85,14 +94,55 @@
                 </Grid>
             </Border>
 
+            <!-- Search bar (visible when not editing) -->
+            <Border Grid.Row="1"
+                    Padding="12,6"
+                    Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}">
+                <Grid>
+                    <TextBox x:Name="SearchBox"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             Background="{StaticResource PanelSurface}"
+                             Foreground="{StaticResource TextPrimary}"
+                             CaretBrush="{StaticResource TextPrimary}"
+                             BorderBrush="{StaticResource PanelBorder}"
+                             BorderThickness="1"
+                             Padding="28,6,8,6"
+                             FontSize="13"/>
+                    <fa:IconBlock Icon="Search" FontSize="12"
+                                 Foreground="{StaticResource TextMuted}"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Margin="10,0,0,0"
+                                 IsHitTestVisible="False"/>
+                    <TextBlock Text="Search notes..."
+                               Foreground="{StaticResource TextMuted}"
+                               FontSize="13"
+                               VerticalAlignment="Center"
+                               Margin="30,0,0,0"
+                               IsHitTestVisible="False">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+            </Border>
+
             <!-- Content area: note list or editor -->
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="2">
                 <!-- Note List (visible when not editing) -->
                 <views:NoteListView DataContext="{Binding}"
                                      Visibility="{Binding IsEditing, Converter={StaticResource InverseBoolToVisibility}}"/>
 
                 <!-- Note Editor (visible when editing) -->
-                <views:NoteEditorView DataContext="{Binding SelectedNote}"
+                <views:NoteEditorView x:Name="EditorView"
+                                       DataContext="{Binding SelectedNote}"
                                        Visibility="{Binding DataContext.IsEditing, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibility}}"/>
             </Grid>
         </Grid>

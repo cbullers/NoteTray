@@ -2,8 +2,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using FontAwesome.Sharp;
 using NoteTray.Services;
 using NoteTray.ViewModels;
+using NoteTray.Views;
 
 namespace NoteTray;
 
@@ -164,12 +166,28 @@ public partial class MainWindow : Window
         }
     }
 
+    private void TogglePreviewButton_Click(object sender, RoutedEventArgs e)
+    {
+        EditorView.TogglePreview();
+        TogglePreviewIcon.Icon = EditorView.IsPreviewMode ? IconChar.Edit : IconChar.Eye;
+        TogglePreviewButton.ToolTip = EditorView.IsPreviewMode ? "Back to Editor" : "Toggle Preview";
+    }
+
+    private void ResetPreviewIcon()
+    {
+        TogglePreviewIcon.Icon = IconChar.Eye;
+        TogglePreviewButton.ToolTip = "Toggle Preview";
+    }
+
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {
             if (ViewModel.IsEditing)
+            {
                 ViewModel.SelectedNote = null;
+                ResetPreviewIcon();
+            }
             else
                 SlideOut();
             e.Handled = true;
