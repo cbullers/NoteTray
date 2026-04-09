@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://cbullers.github.io/NoteTray">Website</a> &middot;
+  <a href="https://cbullers.github.io/NoteTray/">Website</a> &middot;
   <a href="#features">Features</a> &middot;
   <a href="#installation">Installation</a> &middot;
   <a href="#usage">Usage</a>
@@ -36,12 +36,12 @@
 ## Screenshots
 
 <p align="center">
-  <img src="docs/images/note-list.png" alt="Note list view" width="340" />
+  <img src="docs/images/HowToOpen.png" alt="Grab bar on screen edge" width="280" />
   &nbsp;&nbsp;
-  <img src="docs/images/note-editor.png" alt="Note editor" width="340" />
+  <img src="docs/images/Main Pane.png" alt="Note list view" width="280" />
+  &nbsp;&nbsp;
+  <img src="docs/images/Editing A Note.png" alt="Editing a note" width="280" />
 </p>
-
-> Drop screenshots into `docs/images/` and they'll appear here automatically.
 
 ## Installation
 
